@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard | workflow{% endblock title %}
+
+{% block content %}
+    <main class="mx-auto max-w-7xl px-4 py-10">
+        <h1 class="text-3xl font-bold text-slate-900">{{ pageTitle }}</h1>
+        <p class="mt-2 text-slate-500">
+            Gérez vos projets et vos tâches
+        </p>
+        <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-4">
+            {% include 'components/card.html' with cardTitle='Projets' cardValue=totalProjects %}
+            {% include 'components/card.html' with cardTitle='Tâches' cardValue=totalTasks %}
+            {% include 'components/card.html' with cardTitle='Tâches en retard' cardValue=tasksLate %}
+            {% include 'components/card.html' with cardTitle='Tâches terminées' cardValue=tasksCompleted %}
+        </div>
+
+
+    </main>
+{% endblock content %}
