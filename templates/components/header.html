@@ -1,0 +1,21 @@
+<header class="flex h-20 items-center justify-between gap-3 border-b border-zinc-100 px-4  md:px-6">
+    <div class="flex items-center gap-3">
+        <button type="button" data-sidebar-toggle class="rounded-lg text-lg border px-3 py-2 lg:hidden" aria-label="Ouvrir le menu">
+            <i class='bx bx-menu'></i>
+        </button>
+        <div>
+            <p class="text-xs text-zinc-500">Bienvenue</p>
+            <p class="font-semibold">John Doe</p>
+        </div>
+    </div>
+    <div class="flex items-center gap-3">
+        <form action="#" method="get" class="hidden sm:block">
+            <input type="search" name="q" id="search" placeholder="Rechercher une tâche..."
+            class="w-56 rounded-xl border border-zinc-200 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+            >
+        </form>
+        <a href="#" class="flex size-9 items-center justify-center rounded-full bg-zinc-200 text-sm font-semibold">
+            {{ username |first|upper }}
+        </a>
+    </div>
+</header>

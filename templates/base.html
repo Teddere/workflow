@@ -8,8 +8,23 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>{% block title %}workflow{% endblock title %}</title>
         <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
     </head>
-    <body class="min-h-screen bg-slate-50 text-slate-900">
-        {% block content %}{% endblock content %}
+    <body class="bg-zinc-100 text-zinc-900 antialiased">
+        <div class="min-h-screen lg:flex">
+            {# Sidebar include #}
+            {% include 'sidebar.html' %}
+            <div class="min-w-0 flex-1 lg:ml-64">
+                <div class="mx-auto min-h-screen max-w-[1700px] bg-white
+                 lg:overflow-hidden  lg:border lg:border-zinc-200">
+                    {% include 'components/header.html' with username='Tedder' %}
+                    <main class="p-4 md:p-6">
+                        {% block content %}{% endblock content%}
+                    </main>
+                </div>
+            </div>
+        </div>
+        {% block script %}{% endblock %}
+        <script src="{% static 'js/app.js' %}"></script>
     </body>
 </html>
