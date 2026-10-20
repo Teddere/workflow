@@ -8,11 +8,22 @@
         <p class="mt-2 text-slate-500">
             Gérez vos projets et vos tâches
         </p>
-        <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {% include 'components/card.html' with cardTitle='Projets' cardValue=totalProjects %}
-            {% include 'components/card.html' with cardTitle='Tâches' cardValue=totalTasks %}
-            {% include 'components/card.html' with cardTitle='Tâches en retard' cardValue=tasksLate %}
-            {% include 'components/card.html' with cardTitle='Tâches terminées' cardValue=tasksCompleted %}
+        <div class="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {% include 'components/card.html' with cardProgress='+2' priority='new' cardTitle='Projets'  cardColor='text-sky-500' cardValue=totalProjects only %}
+            {% include 'components/card.html' with cardProgress='+15' priority='medium' cardTitle='Tâches' cardColor='text-yellow-500' cardValue=totalTasks only %}
+            {% include 'components/card.html' with cardProgress='+15' priority='high' cardTitle='Tâches en retard' cardColor='text-red-500' cardValue=tasksLate only %}
+            {% include 'components/card.html' with cardProgress='+35' priority='low' cardTitle='Tâches terminées' cardColor='text-green-500' cardValue=tasksCompleted  only%}
+        </div>
+        <h1 class="my-3 text-3xl font-bold text-slate-900">Activités</h1>
+        <div class="mt-2 grid grid-cols-1 gap-3 md:grid-cols-2  lg:grid-cols-3">
+            <div class="rounded-xl bg-white p-6 shadow-sm lg:col-span-2">
+                <p class="text-sm text-slate-500">Activites récentes</p>
+                <h2 class="mt-2 text-3xl font-bold">23</h2>
+            </div>
+            <div class="rounded-xl bg-white p-6 shadow-sm ">
+                <p class="text-sm text-slate-500">Progression</p>
+                <h2 class="mt-2 text-3xl font-bold">55%</h2>
+            </div>
         </div>
     </main>
 {% endblock content %}

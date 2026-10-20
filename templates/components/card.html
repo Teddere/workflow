@@ -1,8 +1,24 @@
-<div class="rounded-xl bg-white p-6 shadow-sm">
-    <p class="text-sm text-slate-500">
-        {{ cardTitle }}
-    </p>
-    <h2 class="mt-2 text-3xl font-bold">
-        {{ cardValue }}
-    </h2>
-</div>
+
+<div class="flex flex-col  gap-4 rounded-xl bg-white  py-6 shadow-sm"><!-- start card container -->
+    <div class="flex flex-row auto-rows-min gap-1.5 px-6 items-center justify-between space-y-0 pb-2"><!-- start card header -->
+        <p class="text-sm font-semibold">{{ cardTitle }}</p>
+        <p>
+            {% if priority == 'high' %}
+                <span class="inline-block rounded-md px-2 py-1 text-xs font-semibold bg-red-50 text-red-500">{{ priority | upper }}</span>
+            {% elif priority == 'medium' %}
+                <span class="inline-block rounded-md px-2 py-1 text-xs font-semibold bg-yellow-50 text-yellow-500">{{ priority | upper }}</span>
+            {% elif priority == 'low'  %}
+                <span class="inline-block rounded-md px-2 py-1 text-xs font-semibold bg-green-50 text-green-500">{{ priority | upper }}</span>
+            {% else %}
+                <span class="inline-block rounded-md px-2 py-1 text-xs font-semibold bg-gray-300 text-gray-600">{{ priority | default:'Unknown'|upper }}</span>
+            {% endif %}
+        </p>
+    </div><!-- end card header -->
+    <div class="px-6"><!-- start card body -->
+        <h2 class="text-2xl font-bold">{{ cardValue }}</h2>
+        {% if cardProgress %}
+        <p class="text-xs {{ cardColor }}">{{ cardProgress }}% / mois</p>
+        {% endif %}
+    </div><!-- end card body -->
+
+</div><!-- end card container -->
