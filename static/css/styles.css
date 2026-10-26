@@ -764,6 +764,9 @@
   .focus\:border-zinc-500:focus {
     border-color: var(--color-zinc-500);
   }
+  .focus\:border-zinc-900:focus {
+    border-color: var(--color-zinc-900);
+  }
   @media (width >= 40rem) {
     .sm\:block {
       display: block;
@@ -792,6 +795,9 @@
     }
     .lg\:hidden {
       display: none;
+    }
+    .lg\:w-50 {
+      width: calc(var(--spacing) * 50);
     }
     .lg\:translate-x-0 {
       --tw-translate-x: 0px;
