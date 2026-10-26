@@ -5,9 +5,19 @@
 {% block content %}
     <main class="mx-auto max-w-7xl ">
         <h1 class="text-3xl font-bold text-slate-900">{{ pageTitle }}</h1>
+        {% if role == 'admin' %}
         <p class="mt-2 text-slate-500">
-            Gérez vos projets et vos tâches
+            Gérez les utilisateurs
         </p>
+        {% elif  role == 'manager' %}
+        <p class="mt-2 text-slate-500">
+            Gérer les projets
+        </p>
+        {% else %}
+        <p class="mt-2 text-slate-500">
+            Gérer mes tâches
+        </p>
+        {% endif %}
         <div class="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             {% include 'components/card.html' with cardProgress='+2' priority='new' cardTitle='Projets'  cardColor='text-sky-500' cardValue=totalProjects only %}
             {% include 'components/card.html' with cardProgress='+15' priority='medium' cardTitle='Tâches' cardColor='text-yellow-500' cardValue=totalTasks only %}

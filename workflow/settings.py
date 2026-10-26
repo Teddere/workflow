@@ -155,3 +155,7 @@ MAILERS = {
 
 # Authentication
 AUTH_USER_MODEL = 'account.User'
+
+# Login
+LOGIN_URL = 'account:login'
+LOGIN_REDIRECT_URL = 'dashboard:home'
