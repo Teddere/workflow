@@ -6,7 +6,7 @@
         <meta name="viewport"
               content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Account | workflow</title>
+        <title>Créer | workflow</title>
         <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     </head>
     <body class="bg-zinc-100 text-zinc-900 antialiased">
@@ -25,9 +25,12 @@
                         {% endfor %}
                     </div>
                 {% endfor %}
-            <button class="w-full rounded-xl bg-zinc-900 p-3 text-white">
+            <button class="w-full rounded-xl bg-zinc-900 p-3 text-white cursor-pointer">
                 S'inscrire
             </button>
+                <a href="{% url 'account:login' %}" class="block text-center text-sm underline">
+                    Se connecter
+                </a>
             </form>
         </main>
     </body>

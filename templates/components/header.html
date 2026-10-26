@@ -17,5 +17,25 @@
         <a href="#" class="flex size-9 items-center justify-center rounded-full bg-zinc-200 text-sm font-semibold">
             {{ username |first|upper }}
         </a>
+        <div class="absolute right-0 top-full mt-3 w-64 overflow-hidden rounded-2xl border-2 border-white bg-zinc-200">
+            <div class="">
+                <span class="">{{ request.user.get_full_name|default:request.user.username }}</span>
+                <span class="">{{ request.user.email }}</span>
+            </div>
+            <div class="">
+                <a href="#" class="">
+                    <i class='bx bx-user'></i>
+                    Profile
+                </a>
+                <a href="#" class="">
+                    <i class='bx bx-user'></i>
+                    Profile
+                </a>
+            </div>
+
+        </div>
+       <!-- <button type="button" class="relative inline-flex justify-center items-center shrink-0 size-9 bg-clib-padding border border-transparent rounded-full">
+            <span class="">R</span>
+        </button>-->
     </div>
 </header>
