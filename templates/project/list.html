@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}liste de projets{% endblock title %}
+
+{% block content %}
+    <div class="mx-auto rounded-md space-y-5 p-6 shadow-md  border border-zinc-200">
+        <div class="mb-6 flex items-center justify-between">
+            <h1 class="text-2xl font-bold">Mes projects</h1>
+            <a href="{% url 'projects:create' %}" class="rounded-xl bg-zinc-900 px-4 py-2 text-sm text-white">
+                <i class="bx bx-plus"></i>
+                Nouveau
+            </a>
+        </div>
+        <div class="space-y-3 md:grid grid-cols-2">
+            <div class="relative">
+                <label for="project-search" class="absolute  inset-y-0 left-0 flex items-center  cursor-pointer pl-3 pointer-events-none text-zinc-400">
+                    <i class="bx bx-search text-lg"></i>
+                </label>
+                <input
+                        type="text"
+                        name=""
+                        id="project-search"
+                        class="w-full pl-10 pr-4 py-2 text-sm bg-white border border-zinc-200 rounded-md focus:outline-none focus:border-zinc-400 transition-all placeholder:text-zinc-400 text-zinc-700 shadow-sm"
+                >
+                <button type="submit" class="absolute inset-y-0 right-0 flex items-center rounded-r-md cursor-pointer py-2 px-2 bg-zinc-900 text-white">
+                    Rechercher
+                </button>
+            </div>
+        </div>
+        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {% for project in projects %}
+            {% include 'components/card.html' with project=project %}
+            {% empty %}
+            <div class="md:col-span-2 xl:col-span-3">
+                <p class="text-sm text-center text-zinc-500">Aucun projet pour le moment.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}
