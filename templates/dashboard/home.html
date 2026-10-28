@@ -19,10 +19,10 @@
         </p>
         {% endif %}
         <div class="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {% include 'components/card.html' with cardProgress='+2' priority='new' cardTitle='Projets'  cardColor='text-sky-500' cardValue=totalProjects only %}
-            {% include 'components/card.html' with cardProgress='+15' priority='medium' cardTitle='Tâches' cardColor='text-yellow-500' cardValue=totalTasks only %}
-            {% include 'components/card.html' with cardProgress='+15' priority='high' cardTitle='Tâches en retard' cardColor='text-red-500' cardValue=tasksLate only %}
-            {% include 'components/card.html' with cardProgress='+35' priority='low' cardTitle='Tâches terminées' cardColor='text-green-500' cardValue=tasksCompleted  only%}
+            {% include 'components/widget.html' with cardProgress='+2' priority='new' cardTitle='Projets'  cardColor='text-sky-500' cardValue=totalProjects only %}
+            {% include 'components/widget.html' with cardProgress='+15' priority='medium' cardTitle='Tâches' cardColor='text-yellow-500' cardValue=totalTasks only %}
+            {% include 'components/widget.html' with cardProgress='+15' priority='high' cardTitle='Tâches en retard' cardColor='text-red-500' cardValue=tasksLate only %}
+            {% include 'components/widget.html' with cardProgress='+35' priority='low' cardTitle='Tâches terminées' cardColor='text-green-500' cardValue=tasksCompleted  only%}
         </div>
         <h1 class="my-3 text-3xl font-bold text-slate-900">Activités</h1>
         <div class="mt-2 grid grid-cols-1 gap-3 md:grid-cols-2  lg:grid-cols-3">
