@@ -71,7 +71,7 @@ def project_list(request):
         .order_by('-created_at', '-pk')
     )
 
-    paginator = Paginator(projects_list, 1)
+    paginator = Paginator(projects_list, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -85,7 +85,7 @@ def project_list(request):
 
 @login_required
 def project_detail(request):
-    pass
+    return render(request,'project/detail.html')
 
 
 
