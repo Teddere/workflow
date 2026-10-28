@@ -10,21 +10,45 @@
                 Nouveau
             </a>
         </div>
-        <div class="space-y-3 md:grid grid-cols-2">
-            <div class="relative">
-                <label for="project-search" class="absolute  inset-y-0 left-0 flex items-center  cursor-pointer pl-3 pointer-events-none text-zinc-400">
+        <div class="space-y-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            <form id="search-form" method="get">
+                <div class="relative mb-2">
+                    <label for="project-search" class="absolute  inset-y-0 left-0 flex items-center  cursor-pointer pl-3 pointer-events-none text-zinc-400">
                     <i class="bx bx-search text-lg"></i>
                 </label>
-                <input
+                    <input
                         type="text"
-                        name=""
+                        name="q"
+                        value="{{ query }}"
                         id="project-search"
                         class="w-full pl-10 pr-4 py-2 text-sm bg-white border border-zinc-200 rounded-md focus:outline-none focus:border-zinc-400 transition-all placeholder:text-zinc-400 text-zinc-700 shadow-sm"
                 >
-                <button type="submit" class="absolute inset-y-0 right-0 flex items-center rounded-r-md cursor-pointer py-2 px-2 bg-zinc-900 text-white">
-                    Rechercher
-                </button>
-            </div>
+                </div>
+                <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+                    <select id="status-select" name="status" class="rounded-md border border-zinc-200 px-4 py-2 text-sm">
+                        <option value="">Tous les statuts</option>
+                        <option value="planned"
+                                 {% if status == 'planned' %}selected{% endif %}
+                        >
+                                Planifié
+                        </option>
+                        <option value="in_progress"
+                            {% if status == 'in_progress' %}selected{% endif %}
+                        >
+                            En cours
+                        </option>
+                        <option value="completed"
+                            {% if status == 'completed' %}selected{% endif %}
+                        >
+                            Terminé
+                        </option>
+                        <option value="cancelled"
+                            {% if status == 'cancelled' %}selected{% endif %}
+                        >
+                            Annulé</option>
+                    </select>
+                </div>
+            </form>
         </div>
         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {% for project in projects %}
@@ -35,5 +59,60 @@
             </div>
             {% endfor %}
         </div>
+        {% if projects.has_next or projects.has_previous %}
+            <div class="flex justify-end space-x-1">
+            {% if projects.has_previous %}
+            <a href="?q={{ query|urlencode}}&status={{ status|urlencode }}&page={{ projects.previous_page_number }}"
+                    class="cursor-pointer rounded-md border border-zinc-300 py-2 px-3 text-center text-sm transition-all shadow-sm hover:shadow-lg text-zinc-600 hover:text-white ml-2 hover:bg-zinc-800 hover:border-zinc-800 focus:text-white focus:bg-zinc-800">
+                    <i class='bx bx-chevrons-left' ></i>
+            </a>
+            {% endif %}
+
+            {% for num in projects.paginator.page_range %}
+                {% if projects.number == num %}
+                <button type="button"
+                        class="min-w-9 rounded-md bg-zinc-800 py-2 px-3 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-zinc-700 focus:shadow-none active:bg-zinc-700 hover:bg-zinc-700 active:shadow-none  ml-2"
+                >
+                        {{ num }}
+                </button>
+                {% else %}
+                <a href="?q={{ query|urlencode}}&status={{ status|urlencode }}&page={{ num }}"
+                        class="cursor-pointer min-w-9 rounded-md border border-zinc-300 py-2 px-3 text-center text-sm transition-all shadow-sm hover:shadow-lg text-zinc-600 hover:text-white hover:bg-zinc-800 hover:border-zinc-800 focus:text-white focus:bg-zinc-800 focus:border-zinc-800 active:border-zinc-800 active:text-white active:bg-zinc-800  ml-2"
+                >
+                    {{ num }}
+                </a>
+                {% endif %}
+            {% endfor %}
+
+            {% if projects.has_next %}
+            <a href="?q={{ query|urlencode}}&status={{ status|urlencode }}&page={{ projects.next_page_number }}"
+               class="min-w-9 rounded-md border border-zinc-300 py-2 px-3 text-center text-sm transition-all shadow-sm hover:shadow-lg text-zinc-600 hover:text-white hover:bg-zinc-800 hover:border-zinc-800 focus:text-white focus:bg-zinc-800 focus:border-zinc-800 active:border-zinc-800 active:text-white active:bg-slate-800  ml-2"
+            >
+                <i class="bx bx-chevrons-right"></i>
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
     </div>
 {% endblock content %}
+{% block script %}
+    <script>
+        const intputSearch = document.getElementById('project-search');
+        const form = document.getElementById('search-form');
+        const select = document.querySelector('#status-select')
+
+        let timeoutId;
+        intputSearch.addEventListener('input',()=>{
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(()=>{
+                form.requestSubmit();
+            },1000);
+        });
+
+        select.addEventListener('change',()=>{
+            clearTimeout(timeoutId);
+            form.requestSubmit();
+        });
+
+    </script>
+{% endblock script %}

@@ -5,6 +5,8 @@ from django.contrib import messages
 
 from django.contrib.auth import get_user_model
 from apps.dashboard.decorators import role_required
+
+from django.core.paginator import Paginator
 from .forms import ProjectForm
 from .models import Project
 
@@ -52,13 +54,39 @@ def project_list(request):
             Q(members=user)
         ).distinct()
 
-    projects_list = projects.select_related('manager').prefetch_related('members')
+    query = request.GET.get('q','').strip()
+    status = request.GET.get('status','').strip()
+
+    if query:
+        projects = projects.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        )
+    if status in Project.Status.values:
+        projects = projects.filter(status=status)
+
+    projects_list = (
+        projects
+        .select_related('manager')
+        .prefetch_related('members')
+        .order_by('-created_at', '-pk')
+    )
+
+    paginator = Paginator(projects_list, 1)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
-            'projects': projects_list.order_by('-created_at')
+            'projects': page_obj,
+            'query':query,
+            'status':status,
         }
 
     return render(request,'project/list.html',context)
+
+@login_required
+def project_detail(request):
+    pass
+
 
 
 
