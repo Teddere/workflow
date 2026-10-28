@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q #combiner plusieurs conditions avec l'opérateur
 from django.contrib import messages
@@ -84,8 +85,32 @@ def project_list(request):
     return render(request,'project/list.html',context)
 
 @login_required
-def project_detail(request):
-    return render(request,'project/detail.html')
+def project_detail(request,pk):
+    user = request.user
+
+    if user.role == User.Role.ADMIN:
+        projects = Project.objects.all()
+
+    elif user.role == User.Role.MANAGER:
+        projects = Project.objects.filter(
+            Q(manager=user) | Q(members=user)
+        ).distinct()
+    else:
+        projects = Project.objects.filter(
+            members=user
+        )
+    project = get_object_or_404(
+        projects
+        .select_related('manager')
+        .prefetch_related('members'),
+        pk=pk
+    )
+
+    context = {
+        'project':project
+    }
+
+    return render(request,'project/detail.html',context)
 
 
 

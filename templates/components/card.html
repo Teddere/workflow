@@ -1,5 +1,5 @@
 
-<a href="#" class="flex justify-between rounded-sm  p-5 border border-zinc-200 hover:shadow-md">
+<a href="{% url 'projects:detail' project.pk %}" class="flex justify-between rounded-sm  p-5 border border-zinc-200 hover:shadow-md">
     <div class="p-2">
         <h2 class="mb-2 text-zinc-800 text-xl font-semibold">{{ project.title }}</h2>
         <p class="text-zinc-600 leading-normal font-light text-xs">

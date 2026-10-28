@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}{% endblock title %}
+{% block title %}{{ project.title }}{% endblock title %}
 {% block content %}
     <div class="mx-auto rounded-md space-y-5 p-6 shadow-md  border border-zinc-200">
         <nav class="w-full">
             <ol class="flex w-full flex-wrap items-center">
                 <li class="flex cursor-pointer items-center text-xs text-zinc-500 transition-colors duration-300 hover:text-zinc-800">
-                    <a href="#">Projets</a>
+                    <a href="{% url 'projects:list' %}">Projets</a>
                     <span class="pointer-events-none mx-1 text-zinc-800">/</span>
                 </li>
                 <li class="flex items-center text-xs text-zinc-500">
@@ -14,21 +14,86 @@
             </ol>
         </nav>
         <div class="flex justify-between items-center pb-5 border-b border-zinc-300">
-            <h2>Gestion de stocks</h2>
-            <span>bagge</span>
+            <h2 class="text-lg font-semibold">{{ project.title }}</h2>
+
+            <span
+                    class="inline-block rounded-md px-2 py-1 text-xs font-medium
+                    {% if project.status == 'completed' %}
+                        bg-green-50 text-green-500
+                    {% elif project.status == 'in_progress' %}
+                        bg-yellow-50 text-yellow-500
+                    {% elif project.status == 'cancelled'  %}
+                        bg-red-50 text-red-500
+                    {% else %}bg-gray-300 text-gray-600{% endif %}"
+            >{{ project.get_status_display|capfirst }}</span>
         </div>
         <div class="w-full py-3">
             <h3 class="text-base font-semibold mb-3">Description</h3>
-            <p class="text-zinc-500 text-sm">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab, aliquid fuga. Alias, atque eum libero nam porro quia. Aliquam, deserunt.</p>
+            <p class="text-zinc-500 text-sm">{{ project.description }}</p>
         </div>
-        <div class="grid">
+        <div class="grid grid-cols-1 md:grid-cols-2 pb-3 border-b border-zinc-300">
             <div class="mb-2">
                 <span class="text-xs text-zinc-500">Responsable</span>
-                <div class="flex items-center gap-4 py-3">
-                    <i class="bx bx-user"></i>
-                    <span class="capitalize font-semibold"></span>
+                <div class="flex items-center gap-2 py-3">
+                    <i class="bx bx-user text-lg"></i>
+                    <span class="capitalize text-sm font-light">{{ project.manager }}</span>
                 </div>
             </div>
+            <div class="mb-2">
+                <span class="text-xs text-zinc-500">Membres</span>
+                <div class="flex items-center gap-2 py-3">
+                    <i class="bx bx-group text-lg"></i>
+                    <span class="capitalize text-sm font-light">
+                        {{ project.members.count }}
+                        {% if project.members.count > 1 %}Membres{% else %}Membre{% endif %}
+                    </span>
+                </div>
+            </div>
+            <div class="mb-2">
+                <span class="text-xs text-zinc-500">Début</span>
+                <div class="flex items-center gap-2 py-3">
+                    <span class="text-sm font-light">
+                        {% if project.start_date %}
+                            {{ project.start_date|date:'d/m/Y' }}
+                        {% else %}
+                            Non définie
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+            <div class="mb-2">
+                <span class="text-xs text-zinc-500">Fin prévue</span>
+                <div class="flex items-center gap-2 py-3">
+                    <span class="text-sm font-light">
+                        {% if project.end_date %}
+                            {{ project.end_date|date:'d/m/Y' }}
+                        {% else %}
+                            Non définie
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="w-full py-3">
+            <div class="flex items-center justify-between pb-3">
+                <h3 class="text-base font-semibold">Membres du projet</h3>
+                <span class="text-xs text-zinc-500">
+                    {{ project.members.count }}
+                    {% if project.members.count > 1 %}
+                        personnes
+                    {% else %}
+                        personne
+                    {% endif %}
+                </span>
+            </div>
+            {% for member in project.members.all %}
+                <div class="flex items-center gap-3">
+                    <i class="bx bx-user"></i>
+                    <span class="text-sm font-medium">{{ member }}</span>
+                </div>
+            {% empty %}
+                <p class="text-xs text-zinc-500">Aucun membre n'a encore été ajouté à ce projet.</p>
+            {% endfor %}
         </div>
     </div>
 {% endblock content %}
