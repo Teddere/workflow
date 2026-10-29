@@ -8,3 +8,7 @@
     --color-primary-600: #2563eb;
     --color-primary-700: #1d4ed8;
 }
+
+.errorlist li {
+    @apply text-xs text-red-500 ;
+}

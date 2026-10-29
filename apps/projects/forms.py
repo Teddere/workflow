@@ -1,6 +1,5 @@
-from urllib.parse import uses_relative
-
 from django import forms
+from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from .models import Project
 
@@ -9,11 +8,11 @@ User = get_user_model()
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ('manager','title','description','status','start_date','end_date','members')
+        fields = ('title','description','status','manager','start_date','end_date','members')
         widgets= {
             'manager':forms.Select(
                 attrs={
-                    'class':'capitalize w-full bg-transparent placeholder:text-zinc-400 text-zinc-700 text-sm border-zinc-200 border border-zinc-200 rounded-md pl-3 pr-8 py-2 transition duration-300 ease focus:outline-none focus:border-zinc-400 hover:border-zinc-400 shadow-sm focus:shadow appearance-none cursor-pointer',
+                    'class':'w-full bg-transparent placeholder:text-zinc-400 text-zinc-700 text-sm border-zinc-200 border border-zinc-200 rounded-md pl-3 pr-8 py-2 transition duration-300 ease focus:outline-none focus:border-zinc-400 hover:border-zinc-400 shadow-sm focus:shadow appearance-none cursor-pointer',
                     'placeholder':'Responsable de projet'
                 }
             ),
@@ -28,13 +27,12 @@ class ProjectForm(forms.ModelForm):
                 attrs={
                     'class':'w-full bg-transparent resize-none shadow-sm focus:shadow hover:border-zinc-300 placeholder:text-zinc-400 text-zinc-700 text-sm border border-zinc-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-zinc-400',
                     'placeholder':'Description de projet',
-                    'rows':4,
+                    'rows':5,
                 }
             ),
             'status': forms.Select(
                 attrs={
                     'class':'w-full bg-transparent placeholder:text-zinc-400 text-zinc-700 text-sm border-zinc-200 border border-zinc-200 rounded-md pl-3 pr-8 py-2 transition duration-300 ease focus:outline-none focus:border-zinc-400 hover:border-zinc-400 shadow-sm focus:shadow appearance-none cursor-pointer',
-                    'placeholder':''
                 }
             ),
             'start_date': forms.DateInput(
@@ -68,9 +66,7 @@ class ProjectForm(forms.ModelForm):
     def __init__(self ,*args,user=None,**kwargs):
         super().__init__(*args, **kwargs)
         self.usr = user
-        print('-------------------------------------------')
-        print(self.usr.role)
-        print('-------------------------------------------')
+
 
         active_users = User.objects.filter(is_active=True).order_by('username')
 
@@ -83,7 +79,7 @@ class ProjectForm(forms.ModelForm):
 
     def clean_manager(self):
         manager = self.cleaned_data['manager']
-        print('maintenant',self.usr.role)
+
         if self.usr is None:
             raise forms.ValidationError(
                 "Impossible de déterminer l'utilisateur."
@@ -93,3 +89,16 @@ class ProjectForm(forms.ModelForm):
                 "Vous devez être responsable des projets que vous créez."
             )
         return manager
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        start_date = cleaned_data.get("start_date")
+        end_date = cleaned_data.get("end_date")
+
+        if start_date and end_date:
+            if start_date > end_date:
+                raise ValidationError({
+                    'end_date':'La date de fin ne peut pas être antérieure à la date de début.'
+                })
+        return cleaned_data

@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.db.models import Q #combiner plusieurs conditions avec l'opérateur
 from django.contrib import messages
 
@@ -111,6 +112,75 @@ def project_detail(request,pk):
     }
 
     return render(request,'project/detail.html',context)
+@login_required
+@role_required(User.Role.ADMIN,User.Role.MANAGER)
+def project_edit(request,pk):
+    user = request.user
+
+    if user.role == User.Role.ADMIN:
+        projects = Project.objects.all()
+
+    elif user.role == User.Role.MANAGER:
+        projects = Project.objects.filter(
+            manager=user
+        )
+    else:
+        projects = Project.objects.none()
+
+
+    project = get_object_or_404(
+        projects
+        .select_related('manager')
+        .prefetch_related('members'),
+        pk=pk
+    )
+
+    if request.method == 'POST':
+        form = ProjectForm(request.POST,instance=project,user=request.user)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Modification a été réalisée avec succès !')
+            return redirect('projects:detail',pk=project.pk)
+
+    else:
+        form = ProjectForm(instance=project,user=request.user)
+
+
+    selected_members = [
+        str(pk) for pk in form['members'].value() or []
+    ]
+    context = {
+        'form':form,
+        'project':project,
+        'users': form.fields['members'].queryset,
+        'selected_members': selected_members,
+    }
+    return render(request,'project/update.html',context)
+
+@login_required
+@role_required(User.Role.ADMIN,User.Role.MANAGER)
+@require_POST
+def project_delete(request,pk):
+    user = request.user
+
+    if user.role == User.Role.ADMIN:
+        projects = Project.objects.all()
+
+    elif user.role == User.Role.MANAGER:
+        projects = Project.objects.filter(
+            manager=user
+        )
+    else:
+        projects = Project.objects.none()
+
+    project = get_object_or_404(pk=pk)
+
+    project.delete()
+    messages.success(request,'Le projet a été supprimé avec succès !')
+    return redirect('projects:list')
+
+
 
 
 

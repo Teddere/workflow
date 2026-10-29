@@ -1,0 +1,70 @@
+<div class="grid grid-cols-1 gap-4 py-3 md:grid-cols-2 mb-1">
+    {% for field in form %}
+        
+        <div class="flex flex-col gap-2 {% if field.name == 'title' or field.name == 'description'%}md:col-span-2{% endif %}">
+            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-zinc-700">
+                {{ field.label }}
+            </label>
+
+            {% if field.name == 'members'%}
+
+                <div class="space-y-3">
+
+                    <div class="relative">
+                        <label for="memberSearch" class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-zinc-400">
+                            <i class="bx bx-search text-lg"></i>
+                        </label>
+                        <input
+                                type="text"
+                                id="memberSearch"
+                                placeholder="Constituez une équipe"
+                                class="w-full pl-10 pr-4 py-2 text-sm bg-white border border-zinc-200 rounded-md focus:outline-none focus:border-zinc-400 transition-all placeholder:text-zinc-400 text-zinc-700 shadow-sm"
+                        >
+                    </div>
+
+                    <div class="max-h-40 overflow-y-auto space-y-2 pr-1 border border-zinc-200 rounded-md p-2 bg-zinc-50/50">
+
+                        {% for usr in users %}
+                            <div class="member-item" data-email="{{ usr.email|lower }}" data-name="{{ usr.username|lower }}">
+                                <input
+                                        type="checkbox"
+                                        name="members"
+                                        id="member-{{ usr.pk }}"
+                                        value="{{ usr.pk }}"
+                                        class="sr-only peer"
+                                        {% if usr.pk|stringformat:'s' in selected_members %}
+                                            checked
+                                        {% endif %}
+                                >
+                                <label for="member-{{ usr.pk }}"
+                                       class="flex items-center justify-between rounded-md border border-zinc-200 bg-white p-2.5 hover:border-zinc-300 cursor-pointer transition-all peer-checked:border-zinc-800 peer-checked:bg-zinc-50 peer-checked:ring-1 peer-checked:ring-zinc-800"
+                                >
+                                    <div class="flex items-center gap-3 pointer-events-none">
+                                        <div class="size-8 rounded-full bg-zinc-200 flex items-center justify-center font-semibold text-zinc-700 text-xs">
+                                            {{ usr.username|first|upper }}
+                                        </div>
+                                        <div>
+                                            <h4 class="text-xs font-semibold text-zinc-800">{{ usr.username|capfirst }}</h4>
+                                            <span class="text-[11px] text-zinc-500">{{ usr.email }}</span>
+                                        </div>
+                                    </div>
+                                    <span class="checkbox-ui bg-red-700 size-4 rounded border border-zinc-300 bg-white flex items-center justify-center transition-colors pointer-events-none">
+                                        <i class="bx bx-check text-white"></i>
+                                    </span>
+                                </label>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            {% else %}
+                {{ field }}
+            {% endif %}
+            {% if field.errors %}
+                {{ field.errors }}
+            {% endif %}
+        </div>
+        
+
+    {% endfor %}
+</div>

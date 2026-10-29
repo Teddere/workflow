@@ -10,24 +10,8 @@
         </p>
     </div>
     <div class="flex flex-col justify-between">
-        <div class="p-2">
-            {% if project.status == 'completed' %}
-            <span class="inline-block rounded-md px-2 py-1 text-xs font-base bg-green-50 text-green-500">
-                {{ project.get_status_display|capfirst }}
-            </span>
-            {% elif project.status == 'in_progress' %}
-            <span class="inline-block rounded-md px-2 py-1 text-xs font-base bg-yellow-50 text-yellow-500">
-                {{ project.get_status_display|capfirst }}
-            </span>
-            {% elif project.status == 'cancelled' %}
-            <span class="inline-block rounded-md px-2 py-1 text-xs font-base bg-red-50 text-red-500">
-                {{ project.get_status_display|capfirst }}
-            </span>
-            {% else %}
-                <span class="inline-block rounded-md px-2 py-1 text-xs font-base bg-gray-300 text-gray-600">
-                    {{ project.get_status_display|capfirst }}
-                </span>
-            {% endif %}
+        <div class="text-end">
+            {% include 'components/badge.html' with status=project.status content=project.get_status_display %}
         </div>
         <div class="text-sm text-slate-600 font-medium">
             <i class='bx bx-group text-2xl'></i>

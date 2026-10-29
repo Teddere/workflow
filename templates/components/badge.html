@@ -1,0 +1,12 @@
+<div class="
+        inline-block py-0.5 px-2.5 border border-transparent text-sm transition-all rounded-sm
+        {% if status == 'completed' %}
+            text-green-600 bg-green-100
+        {% elif status == 'in_progress' %}
+            bg-yellow-100 text-yellow-600
+        {% elif status == 'cancelled'  %}
+            bg-red-100 text-red-600
+        {% else %}bg-slate-100 text-zinc-600{% endif %}"
+>
+    {{ content|capfirst }}
+</div>

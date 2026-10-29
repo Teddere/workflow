@@ -2,7 +2,7 @@
 {% block title %}{{ project.title }}{% endblock title %}
 {% block content %}
     <div class="mx-auto rounded-md space-y-5 p-6 shadow-md  border border-zinc-200">
-        <nav class="w-full">
+        <nav class="w-full flex justify-between items-center">
             <ol class="flex w-full flex-wrap items-center">
                 <li class="flex cursor-pointer items-center text-xs text-zinc-500 transition-colors duration-300 hover:text-zinc-800">
                     <a href="{% url 'projects:list' %}">Projets</a>
@@ -12,20 +12,35 @@
                     <span>Détail</span>
                 </li>
             </ol>
+            {% if project.manager == request.user.role or  request.user.role == 'admin' %}
+
+                <div class="relative">
+                    <button id="purple-btn" type="button" aria-controls="purple" aria-expanded="false" class="cursor-pointer text-xl px-2 py-2">
+                        <i class="bx bx-dots-vertical-rounded"></i>
+                    </button>
+                    <ul id="purple" class="hidden absolute w-30 right-7 top-7 overflow-hidden  border border-zinc-200 rounded-md bg-white shadow-sm  transition-all duration ease-in-out opacity-0 scale-95 -translate-y-2">
+                        <li class="block mx-1 my-1">
+                            <a href="{% url 'projects:edit' project.pk %}" class="inline-block w-full text-center rounded-md px-3 py-1 text-sm text-zinc-700 hover:bg-zinc-100">
+                                Modifier
+                            </a>
+                        </li>
+                        <li class="block mx-1 my-1">
+                            <button
+                                    id="open-modal-btn"
+                                    type="button"
+                                    aria-controls="modal-box"
+                                    aria-expanded="false"
+                                    class=" cursor-pointer inline-block  w-full rounded-md px-3 py-1 text-sm text-red-700 hover:bg-red-50">
+                                Supprimer
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            {% endif %}
         </nav>
         <div class="flex justify-between items-center pb-5 border-b border-zinc-300">
             <h2 class="text-lg font-semibold">{{ project.title }}</h2>
-
-            <span
-                    class="inline-block rounded-md px-2 py-1 text-xs font-medium
-                    {% if project.status == 'completed' %}
-                        bg-green-50 text-green-500
-                    {% elif project.status == 'in_progress' %}
-                        bg-yellow-50 text-yellow-500
-                    {% elif project.status == 'cancelled'  %}
-                        bg-red-50 text-red-500
-                    {% else %}bg-gray-300 text-gray-600{% endif %}"
-            >{{ project.get_status_display|capfirst }}</span>
+            {% include 'components/badge.html' with status=project.status content=project.get_status_display %}
         </div>
         <div class="w-full py-3">
             <h3 class="text-base font-semibold mb-3">Description</h3>
@@ -36,14 +51,14 @@
                 <span class="text-xs text-zinc-500">Responsable</span>
                 <div class="flex items-center gap-2 py-3">
                     <i class="bx bx-user text-lg"></i>
-                    <span class="capitalize text-sm font-light">{{ project.manager }}</span>
+                    <span class="capitalize text-sm font-medium">{{ project.manager }}</span>
                 </div>
             </div>
             <div class="mb-2">
                 <span class="text-xs text-zinc-500">Membres</span>
                 <div class="flex items-center gap-2 py-3">
                     <i class="bx bx-group text-lg"></i>
-                    <span class="capitalize text-sm font-light">
+                    <span class="capitalize text-sm font-medium">
                         {{ project.members.count }}
                         {% if project.members.count > 1 %}Membres{% else %}Membre{% endif %}
                     </span>
@@ -52,7 +67,7 @@
             <div class="mb-2">
                 <span class="text-xs text-zinc-500">Début</span>
                 <div class="flex items-center gap-2 py-3">
-                    <span class="text-sm font-light">
+                    <span class="text-sm font-medium">
                         {% if project.start_date %}
                             {{ project.start_date|date:'d/m/Y' }}
                         {% else %}
@@ -64,7 +79,7 @@
             <div class="mb-2">
                 <span class="text-xs text-zinc-500">Fin prévue</span>
                 <div class="flex items-center gap-2 py-3">
-                    <span class="text-sm font-light">
+                    <span class="text-sm font-medium">
                         {% if project.end_date %}
                             {{ project.end_date|date:'d/m/Y' }}
                         {% else %}
@@ -96,4 +111,5 @@
             {% endfor %}
         </div>
     </div>
+    {% include 'components/confirmModal.html' %}
 {% endblock content %}
