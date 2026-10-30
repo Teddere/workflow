@@ -174,7 +174,7 @@ def project_delete(request,pk):
     else:
         projects = Project.objects.none()
 
-    project = get_object_or_404(pk=pk)
+    project = get_object_or_404(projects,pk=pk)
 
     project.delete()
     messages.success(request,'Le projet a été supprimé avec succès !')
