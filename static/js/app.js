@@ -66,9 +66,10 @@ document.addEventListener('DOMContentLoaded',()=>{
         purpleBtn.setAttribute('aria-expanded','false');
     }
     // modal purple control
-    function openModal(modalId) {
+    function openModal(modalId,modalTitle) {
         let modal = document.getElementById(modalId);
         let modalBox = modal.querySelector('.modal-box');
+        modalBox.querySelector('.modal-title').textContent = modalTitle
         clearTimeout(closeTimeout)
         modal.classList.remove('pointer-events-none','opacity-0');
         modal.classList.add('opacity-100')
@@ -146,7 +147,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     * ------------------------------------------------------------------------*/
     document.body.addEventListener('htmx:afterSwap',(event)=>{
        if (event.detail.target.id === 'form-modal') {
-            openModal('modal');
+            openModal('modal','Nouvelle tâche');
         }
     });
     document.body.addEventListener('taskCreated',(event)=>{
@@ -169,12 +170,12 @@ document.addEventListener('DOMContentLoaded',()=>{
         let closeModalBtn = event.target.closest('[data-modal-close]');
 
         if (openModalBtn) {
-            openModal(openModalBtn.getAttribute('data-modal-target'));
+            openModal(openModalBtn.getAttribute('data-modal-target'),openModalBtn.getAttribute('aria-label'));
         }
         if (closeModalBtn) {
             closeModal(closeModalBtn.getAttribute('data-modal-close'));
         }
-        if (event.target.id ==='modal' && !event.target.classList.contains('pointer-events-none')) {
+        if ((event.target.id ==='modal' || event.target.id==='modal-confirm') && !event.target.classList.contains('pointer-events-none')) {
             closeModal(event.target.id);
         }
 

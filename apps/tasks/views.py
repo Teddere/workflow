@@ -7,7 +7,8 @@ from django.contrib.auth.decorators import login_required
 from apps.dashboard.decorators import role_required
 
 from apps.projects.models import Project
-from .forms import TaskForm
+from apps.tasks.models import Task
+from .forms import TaskForm,TaskStatusForm
 
 User = get_user_model()
 @login_required
@@ -58,6 +59,18 @@ def project_task_list(request,project_pk):
         )
     project = get_object_or_404(projects,pk=project_pk)
     return render(request, 'tasks/_project_tasks.html', {'project':project})
+
+def task_update(request,pk):
+    user = request.user
+    task = Task.objects.get(pk=pk)
+
+    if user.role == User.Role.ADMIN:
+        form = TaskForm()
+    elif user.role == User.Role.MANAGER and user == task.project.manager:
+        form = TaskForm()
+
+    elif user == task.project.members:
+        form = TaskStatusForm()
 
 
 
