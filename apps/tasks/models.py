@@ -38,3 +38,5 @@ class Task(models.Model):
                 raise ValidationError({
                     'due_date':"L'échéance ne peut pas être antérieure à la date de début du projet."
                 })
+
+

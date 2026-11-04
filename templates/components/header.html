@@ -15,10 +15,10 @@
             >
         </form>
         <div class="relative">
-            <button id="btn-profile-menu" type="button" aria-controls="profile-box" aria-expanded="false" class="fex size-9 items-center justify-center rounded-full cursor-pointer  bg-zinc-200 text-zinc-700 text-sm font-semibold">
+            <button id="profile-menu-btn" type="button"  aria-expanded="false" class="fex size-9 items-center justify-center rounded-full cursor-pointer  bg-zinc-200 text-zinc-700 text-sm font-semibold">
                 {{ request.user.username|first|upper  }}
             </button>
-            <div id="profile-menu" class="hidden absolute right-0 z-50 top-full mt-3 w-64 overflow-hidden border border-zinc-200 rounded-2xl bg-white shadow-xl shadow-zinc-900/10 transition-all duration ease-in-out opacity-0 scale-95 -translate-y-2">
+            <div id="dropdown-profile" class="hidden absolute right-0 z-50 top-full mt-3 w-64 overflow-hidden border border-zinc-200 rounded-2xl bg-white shadow-xl shadow-zinc-900/10 transition-all duration ease-in-out opacity-0 scale-95 -translate-y-2">
                 <div class="border-b border-zinc-100 px-4 py-3">
                     <span class="truncate text-sm font-semibold">{{ request.user.get_full_name|default:request.user.username }}</span>
                     <span class="truncate text-xs text-zinc-500">{{ request.user.email }}</span>

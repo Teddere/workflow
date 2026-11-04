@@ -12,13 +12,12 @@
                     <span>Détail</span>
                 </li>
             </ol>
-            {% if project.manager == request.user.role or  request.user.role == 'admin' %}
-
+            {% if project.manager_id == request.user.pk or  request.user.role == 'admin' %}
                 <div class="relative">
                     <button id="purple-btn" type="button" aria-controls="purple" aria-expanded="false" class="cursor-pointer text-xl px-2 py-2">
                         <i class="bx bx-dots-vertical-rounded"></i>
                     </button>
-                    <ul id="purple" class="hidden absolute w-30 right-7 top-7 overflow-hidden  border border-zinc-200 rounded-md bg-white shadow-sm  transition-all duration ease-in-out opacity-0 scale-95 -translate-y-2">
+                    <ul id="purple-box" class="hidden absolute w-30 right-7 top-7 overflow-hidden  border border-zinc-200 rounded-md bg-white shadow-sm  transition-all duration ease-in-out opacity-0 scale-95 -translate-y-2">
                         <li class="block mx-1 my-1">
                             <a href="{% url 'projects:edit' project.pk %}" class="inline-block w-full text-center rounded-md px-3 py-1 text-sm text-zinc-700 hover:bg-zinc-100">
                                 Modifier
@@ -26,11 +25,11 @@
                         </li>
                         <li class="block mx-1 my-1">
                             <button
-                                    id="open-modal-btn"
                                     type="button"
+                                    data-modal-target="modal-confirm"
                                     aria-controls="modal-box"
                                     aria-expanded="false"
-                                    class=" cursor-pointer inline-block  w-full rounded-md px-3 py-1 text-sm text-red-700 hover:bg-red-50">
+                                    class="modal-btn cursor-pointer inline-block  w-full rounded-md px-3 py-1 text-sm text-red-700 hover:bg-red-50">
                                 Supprimer
                             </button>
                         </li>
@@ -88,6 +87,21 @@
                     </span>
                 </div>
             </div>
+            {% if project.manager_id == request.user.pk or  request.user.role == 'admin' %}
+                <div class="mb-2">
+                <button type="button"
+                        hx-get="{% url 'tasks:create' project.pk %}"
+                        hx-target="#form-modal"
+                        hx-swap="innerHTML"
+                        aria-controls="modal"
+                        aria-expanded="false"
+                        class="flex text-zinc-900  items-center md:text-zinc-500 md:hover:text-zinc-900 text-sm font-normal group  cursor-pointer"
+                >
+                    <span class="group-hover:underline">Ajouter une tâche&nbsp;</span>
+                    <i class="bx bx-plus"></i>
+                </button>
+            </div>
+            {% endif %}
         </div>
         <div class="w-full py-3">
             <div class="flex items-center justify-between pb-3">
@@ -110,6 +124,14 @@
                 <p class="text-xs text-zinc-500">Aucun membre n'a encore été ajouté à ce projet.</p>
             {% endfor %}
         </div>
+        {% include 'tasks/_project_tasks.html' with project=project only %}
     </div>
+
     {% include 'components/confirmModal.html' %}
+    {% include 'components/modal.html' with modalTitle='Tâche' %}
+
 {% endblock content %}
+{% block script %}
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.11/dist/htmx.min.js"></script>
+{% endblock script %}
+

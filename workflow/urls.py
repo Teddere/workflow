@@ -9,6 +9,7 @@ urlpatterns = [
     path('',include('apps.dashboard.urls',namespace='dashboard')),
     path('', include('apps.account.urls',namespace='account')),
     path('projects/',include('apps.projects.urls',namespace='projects')),
+    path('projects/',include('apps.tasks.urls',namespace='tasks')),
 ]
 
 #urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -6,7 +6,6 @@
         <div class="pb-5 border-b border-zinc-300">
             <h1 class="text-lg font-semibold">Nouveau projet</h1>
         </div>
-
         <form  method="post">
             {% csrf_token %}
             {% include 'components/project_form.html' %}

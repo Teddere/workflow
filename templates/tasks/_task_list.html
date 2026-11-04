@@ -1,0 +1,13 @@
+<div class="rounded-lg border border-zinc-200 p-4 mb-2">
+    <a href="#">
+        <div class="flex justify-between items-center">
+           <h4 class="text-base font-semibold text-zinc-800">{{ task.title }}</h4>
+            {% include 'components/badge.html' with status=task.status content=task.get_status_display %}
+        </div>
+        <div class="text-sm text-zinc-500">
+            Responsable : <span>{% if task.assigned_to %}{{ task.assigned_to.username|capfirst }}{% else %}Non attribuée{% endif %}</span>
+
+            <span>Priorité: {{ task.get_priority_display }}</span>
+        </div>
+    </a>
+</div>

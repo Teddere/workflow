@@ -12,6 +12,8 @@ from django.core.paginator import Paginator
 from .forms import ProjectForm
 from .models import Project
 
+# tasks app
+
 User = get_user_model()
 @login_required
 @role_required(User.Role.ADMIN,User.Role.MANAGER)
@@ -100,6 +102,7 @@ def project_detail(request,pk):
         projects = Project.objects.filter(
             members=user
         )
+
     project = get_object_or_404(
         projects
         .select_related('manager')
