@@ -1,13 +1,36 @@
 <div class="rounded-lg border border-zinc-200 p-4 mb-2">
-    <a href="#">
-        <div class="flex justify-between items-center">
-           <h4 class="text-base font-semibold text-zinc-800">{{ task.title }}</h4>
+    <div class="flex justify-between items-center">
+        <h4 class="text-base font-semibold text-zinc-800">{{ task.title }}</h4>
             {% include 'components/badge.html' with status=task.status content=task.get_status_display %}
-        </div>
-        <div class="text-sm text-zinc-500">
-            Responsable : <span>{% if task.assigned_to %}{{ task.assigned_to.username|capfirst }}{% else %}Non attribuée{% endif %}</span>
-
-            <span>Priorité: {{ task.get_priority_display }}</span>
-        </div>
-    </a>
+    </div>
+    <div class="text-sm text-zinc-500">
+        Responsable : <span>{% if task.assigned_to %}{{ task.assigned_to.username|capfirst }}{% else %}Non attribuée{% endif %}</span>
+        <span>Priorité: {{ task.get_priority_display }}</span>
+    </div>
+    <div class="flex items-center justify-between md:justify-start gap-2 pt-2">
+        <a href="#" class="text-zinc-900 md:text-zinc-500 md:hover:text-zinc-900 hover:underline text-xs font-normal">
+            Consulter
+        </a>
+        {% if task.can_edit %}
+            <button type="button"
+                    hx-get="{% url 'tasks:edit' task.pk %}"
+                    hx-target="#form-modal"
+                    hx-swap="innerHTML"
+                    class="text-blue-900 cursor-pointer md:text-blue-800 md:hover:text-blue-900 hover:underline text-xs font-normal">
+                Modifier
+            </button>
+        {% endif %}
+        {% if task.can_delete %}
+            <button type="button"
+                    data-task-delete-url="{% url 'tasks:delete' task.pk %}"
+                    data-modal-target="modal-confirm"
+                    aria-controls="modal-box"
+                    aria-expanded="false"
+                    aria-label="la tâche {{ task.title }}"
+                    class="text-sm text-red-700 text-xs cursor-pointer hover:text-red-500 hover:underline"
+            >
+                Supprimer
+            </button>
+        {% endif %}
+    </div>
 </div>

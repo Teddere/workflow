@@ -11,6 +11,7 @@ from apps.dashboard.decorators import role_required
 from django.core.paginator import Paginator
 from .forms import ProjectForm
 from .models import Project
+from apps.tasks.permissions import permission_task
 
 # tasks app
 
@@ -109,9 +110,11 @@ def project_detail(request,pk):
         .prefetch_related('members'),
         pk=pk
     )
-
+    tasks = list(project.tasks.select_related('assigned_to','project'))
+    tasks = permission_task(user, tasks)
     context = {
-        'project':project
+        'project':project,
+        'tasks':tasks,
     }
 
     return render(request,'project/detail.html',context)

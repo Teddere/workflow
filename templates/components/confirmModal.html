@@ -3,11 +3,12 @@
     <div id="modal-confirm-content" class="modal-box relative m-4 p-4 rounded-lg bg-white opacity-0 shadow-sm scale-95 transition-all duration-300">
         <div class="modal-title flex items-center pb-4 text-lg font-medium text-zinc-700">Confirmation</div>
         <div class="relative border-t border-zinc-200 py-4 leading-normal text-zinc-800 font-light">
-            Voulez-vous vraiment supprimer <b>{{ project.title }}</b> ?<br>
+            Êtes-vous sûr de vouloir supprimer
+            <b id="modalInfo"></b> ?<br>
             <small class="text-zinc-700">Cette action est irréversible.</small>
         </div>
         <div class="flex gap-4 flex-wrap items-center pt-4 justify-end">
-            <form action="{% url 'projects:delete' project.pk %}" method="post">
+            <form id="form-confirm"  hx-swap="none" method="post">
                 {% csrf_token %}
                 <button type="button"
                         data-modal-close="modal-confirm"

@@ -1,7 +1,7 @@
 from functools import wraps # préserver les informations de la fonction décorée
 from django.core.exceptions import PermissionDenied #renvoie un statut 403 aux utilisateurs connectés
 from django.contrib.auth import get_user_model
-from django.http import HttpResponse
+
 
 User = get_user_model()
 

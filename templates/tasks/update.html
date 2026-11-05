@@ -1,0 +1,24 @@
+<form id="task-update-form" hx-post="{% url 'tasks:edit' task.pk %}" hx-target="#form-modal" hx-swap="innerHTML" method="post" class="space-y-4">
+    {% if form.non_field_errors %}
+        <div class="rounded-md bg-red-50 p-3 text-sm text-red-700">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+    {% csrf_token %}
+    <div class="grid grid-cols-1 gap-4 py-3 md:grid-cols-2 mb-2">
+        {% for field in form %}
+            <div class="flex flex-col gap-2 {% if field.name == 'title' or field.name == 'description'%}md:col-span-2{% endif %}">
+                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-zinc-700">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                    {% for err in field.errors %}
+                        <p class="text-xs text-red-600">{{ err }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+</form>

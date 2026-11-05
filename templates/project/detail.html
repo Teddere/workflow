@@ -26,10 +26,11 @@
                         <li class="block mx-1 my-1">
                             <button
                                     type="button"
+                                    data-task-delete-url="{% url 'projects:delete' project.pk %}"
                                     data-modal-target="modal-confirm"
                                     aria-controls="modal-box"
                                     aria-expanded="false"
-                                    aria-label="Confirmation"
+                                    aria-label="le projet {{ project.title }}"
                                     class="modal-btn cursor-pointer inline-block  w-full rounded-md px-3 py-1 text-sm text-red-700 hover:bg-red-50">
                                 Supprimer
                             </button>
@@ -96,7 +97,6 @@
                         hx-swap="innerHTML"
                         aria-controls="modal"
                         aria-expanded="false"
-                        aria-label="Nouvelle tâche"
                         class="flex text-zinc-900  items-center md:text-zinc-500 md:hover:text-zinc-900 text-sm font-normal group  cursor-pointer"
                 >
                     <span class="group-hover:underline">Ajouter une tâche&nbsp;</span>
@@ -126,14 +126,24 @@
                 <p class="text-xs text-zinc-500">Aucun membre n'a encore été ajouté à ce projet.</p>
             {% endfor %}
         </div>
-        {% include 'tasks/_project_tasks.html' with project=project only %}
+        {% include 'tasks/_project_tasks.html' with project=project tasks=tasks only %}
     </div>
 
     {% include 'components/confirmModal.html' %}
     {% include 'components/modal.html' with modalTitle='Tâche' %}
-
 {% endblock content %}
 {% block script %}
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.11/dist/htmx.min.js"></script>
+    <script>
+        document.addEventListener('click',(event)=>{
+          const deleteBtn = event.target.closest('[data-task-delete-url]')
+            if (deleteBtn) {
+                const deleteUrl = deleteBtn.dataset.taskDeleteUrl;
+                const deleteForm = document.getElementById('form-confirm');
+                deleteForm.setAttribute('hx-post',deleteUrl);
+                htmx.process(deleteForm)
+            }
+        })
+    </script>
 {% endblock script %}
 
